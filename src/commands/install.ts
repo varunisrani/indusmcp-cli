@@ -57,11 +57,24 @@ export async function installCommand(name: string, opts: Opts): Promise<void> {
   const slug = (server.title ?? server.name).split("/").pop() ?? server.name;
 
   if (opts.client === "claude-code") {
-    installIntoClaudeCode(slug, entry, env);
+    // claude mcp add requires [a-zA-Z0-9_-]+ — strip spaces/parens/dots etc.
+    const safeSlug =
+      slugifyForClaudeCode(server.name.split("/").pop() ?? server.name) ||
+      slugifyForClaudeCode(slug) ||
+      "mcp-server";
+    installIntoClaudeCode(safeSlug, entry, env);
     return;
   }
 
   installIntoFileClient(opts.client, slug, entry, env);
+}
+
+function slugifyForClaudeCode(raw: string): string {
+  return raw
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .substring(0, 64);
 }
 
 function installIntoFileClient(
