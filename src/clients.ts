@@ -60,6 +60,15 @@ export function configPath(client: FileBackedClient): string {
   }
 }
 
+// Workaround for an indusagi-framework bug (config.js uses require() inside
+// an ESM module; the try/catch swallows the ReferenceError and falls through
+// to a directory-based fallback that looks at ~/.indusvx/... paths). Until
+// the framework is patched upstream, also write the config to the legacy
+// fallback path so the agent actually picks it up.
+export function indusagiLegacyConfigPath(): string {
+  return join(homedir(), ".indusvx", "agent", "mcp-servers.json");
+}
+
 export function readConfig(client: FileBackedClient): Record<string, unknown> {
   const p = configPath(client);
   if (!existsSync(p)) return {};

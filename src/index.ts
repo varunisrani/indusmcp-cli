@@ -13,7 +13,7 @@ program
   .description(
     "Search and install MCP servers locally. Credentials stay on your machine.",
   )
-  .version("0.1.5");
+  .version("0.1.6");
 
 program
   .command("search <query>")

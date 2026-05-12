@@ -1,6 +1,6 @@
 {
   "name": "indusmcp",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "IndusMCP CLI — search and install MCP servers locally. Credentials stay on your machine.",
   "license": "MIT",
   "type": "module",

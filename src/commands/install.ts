@@ -7,8 +7,11 @@ import {
   type Pkg,
   type ServerJson,
 } from "../registry.js";
+import { dirname } from "node:path";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import {
   claudeCodeAvailable,
+  indusagiLegacyConfigPath,
   readConfig,
   writeConfig,
   type ClientId,
@@ -107,9 +110,23 @@ function installIntoIndusagi(
   config["servers"] = list;
   writeConfig("indusagi", config);
 
+  // Mirror to the framework's legacy fallback path. The indusagi framework
+  // (node_modules/indusagi/dist/mcp/config.js) has a bug where it calls
+  // require("fs") inside an ESM module, so its explicit-path loader silently
+  // fails and falls through to ~/.indusvx/agent/mcp-servers.json — which
+  // does work. Writing to both keeps things working today and forward-
+  // compatible when the framework is fixed.
+  const legacy = indusagiLegacyConfigPath();
+  const legacyDir = dirname(legacy);
+  if (!existsSync(legacyDir)) mkdirSync(legacyDir, { recursive: true });
+  writeFileSync(legacy, JSON.stringify(config, null, 2));
+
   console.log(kleur.green("OK"), `Installed into indusagi.`);
   console.log(
     kleur.dim(`  Wrote ~/.indusagi/agent/mcp-servers.json (backup saved).`),
+  );
+  console.log(
+    kleur.dim(`  Mirror at ~/.indusvx/agent/mcp-servers.json (framework workaround).`),
   );
   console.log(
     kleur.dim(`  Next 'indusagi' / 'indus' run will pick up the server.`),
