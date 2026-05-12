@@ -12,7 +12,12 @@ export async function doctorCommand(): Promise<void> {
     `Node ${nodeOk ? kleur.green("OK") : kleur.red("ERR")} ${process.version}`,
   );
 
-  for (const client of ["claude", "cursor", "vscode"] as const) {
+  for (const client of [
+    "claude",
+    "cursor",
+    "vscode",
+    "indusagi",
+  ] as const) {
     const p = configPath(client);
     console.log(
       `${client}: ${existsSync(p) ? kleur.green("found") : kleur.dim("not found")} (${p})`,

@@ -22,6 +22,29 @@ export async function listCommand(opts: { client: ClientId }): Promise<void> {
 
   const client = opts.client as FileBackedClient;
   const config = readConfig(client);
+
+  // indusagi uses an ARRAY of { name, command, args, ... }
+  if (client === "indusagi") {
+    const raw = config["servers"];
+    const list: Array<Record<string, unknown>> = Array.isArray(raw)
+      ? (raw as Array<Record<string, unknown>>)
+      : [];
+    if (list.length === 0) {
+      console.log(kleur.dim(`No servers installed for indusagi.`));
+      return;
+    }
+    console.log(kleur.bold(`Installed in indusagi:`));
+    for (const entry of list) {
+      const name = entry?.name as string | undefined;
+      const enabled = entry?.enabled !== false;
+      const marker = enabled ? "  -" : kleur.dim("  -");
+      const suffix = enabled ? "" : kleur.dim(" (disabled)");
+      console.log(`${marker} ${name ?? "<unnamed>"}${suffix}`);
+    }
+    return;
+  }
+
+  // claude / cursor / vscode use an OBJECT keyed by server name
   const key = client === "claude" ? "mcpServers" : "servers";
   const servers = (config[key] as Record<string, unknown>) ?? {};
   const names = Object.keys(servers);

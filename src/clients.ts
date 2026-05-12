@@ -8,19 +8,28 @@ import {
 } from "node:fs";
 import { execSync } from "node:child_process";
 
-export type ClientId = "claude" | "claude-code" | "cursor" | "vscode";
+export type ClientId =
+  | "claude"
+  | "claude-code"
+  | "cursor"
+  | "vscode"
+  | "indusagi";
 
 export const ALL_CLIENTS: ClientId[] = [
   "claude",
   "claude-code",
   "cursor",
   "vscode",
+  "indusagi",
 ];
 
-// File-based clients write their MCP config to a known JSON file.
-// claude-code uses its own CLI (`claude mcp add`) and doesn't have a single
-// stable file we own — so it's handled separately in install/list commands.
-export type FileBackedClient = "claude" | "cursor" | "vscode";
+// claude / cursor / vscode / indusagi all write to a single JSON file.
+// claude-code is special — it shells out to `claude mcp add` instead.
+export type FileBackedClient =
+  | "claude"
+  | "cursor"
+  | "vscode"
+  | "indusagi";
 
 export function configPath(client: FileBackedClient): string {
   const home = homedir();
@@ -46,6 +55,8 @@ export function configPath(client: FileBackedClient): string {
       return join(home, ".cursor", "mcp.json");
     case "vscode":
       return join(home, ".vscode", "mcp.json");
+    case "indusagi":
+      return join(home, ".indusagi", "agent", "mcp-servers.json");
   }
 }
 

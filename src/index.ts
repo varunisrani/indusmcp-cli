@@ -13,7 +13,7 @@ program
   .description(
     "Search and install MCP servers locally. Credentials stay on your machine.",
   )
-  .version("0.1.4");
+  .version("0.1.5");
 
 program
   .command("search <query>")
@@ -23,13 +23,13 @@ program
 program
   .command("install <name>")
   .description("Install a server into a local MCP client")
-  .option("--client <client>", "claude | claude-code | cursor | vscode", "claude")
+  .option("--client <client>", "claude | claude-code | cursor | vscode | indusagi", "claude")
   .action(installCommand);
 
 program
   .command("list")
   .description("List installed servers for a client")
-  .option("--client <client>", "claude | claude-code | cursor | vscode", "claude")
+  .option("--client <client>", "claude | claude-code | cursor | vscode | indusagi", "claude")
   .action(listCommand);
 
 program

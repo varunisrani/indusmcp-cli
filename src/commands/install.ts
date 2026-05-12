@@ -66,7 +66,54 @@ export async function installCommand(name: string, opts: Opts): Promise<void> {
     return;
   }
 
+  if (opts.client === "indusagi") {
+    const safeSlug =
+      slugifyForClaudeCode(server.name.split("/").pop() ?? server.name) ||
+      slugifyForClaudeCode(slug) ||
+      "mcp-server";
+    installIntoIndusagi(safeSlug, entry, env);
+    return;
+  }
+
   installIntoFileClient(opts.client, slug, entry, env);
+}
+
+function installIntoIndusagi(
+  name: string,
+  entry: { command: string; args: string[] },
+  env: Record<string, string>,
+): void {
+  // indusagi uses ~/.indusagi/agent/mcp-servers.json with shape
+  //   { "servers": [ { name, command, args, env?, enabled: true } ] }
+  // — an ARRAY of entries, each carrying its own name.
+  const config = readConfig("indusagi");
+  const raw = config["servers"];
+  const list: Array<Record<string, unknown>> = Array.isArray(raw)
+    ? (raw as Array<Record<string, unknown>>)
+    : [];
+
+  const newEntry: Record<string, unknown> = {
+    name,
+    command: entry.command,
+    args: entry.args,
+    enabled: true,
+  };
+  if (Object.keys(env).length > 0) newEntry.env = env;
+
+  const idx = list.findIndex((e) => e?.name === name);
+  if (idx >= 0) list[idx] = newEntry;
+  else list.push(newEntry);
+
+  config["servers"] = list;
+  writeConfig("indusagi", config);
+
+  console.log(kleur.green("OK"), `Installed into indusagi.`);
+  console.log(
+    kleur.dim(`  Wrote ~/.indusagi/agent/mcp-servers.json (backup saved).`),
+  );
+  console.log(
+    kleur.dim(`  Next 'indusagi' / 'indus' run will pick up the server.`),
+  );
 }
 
 function slugifyForClaudeCode(raw: string): string {
