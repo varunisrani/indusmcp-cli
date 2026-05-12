@@ -36,7 +36,7 @@ export async function doctorCommand(): Promise<void> {
   console.log();
   console.log(
     kleur.dim(
-      `Registry: ${process.env.INDUSMCP_REGISTRY ?? "https://indusmcp.vercel.app/api/v0"}`,
+      `Registry: ${process.env.INDUSMCP_REGISTRY ?? "https://www.indusmcp.com/api/v0"}`,
     ),
   );
 }

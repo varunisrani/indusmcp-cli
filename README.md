@@ -16,11 +16,11 @@ npm install -g indusmcp
 indusmcp search filesystem
 ```
 
-Supported clients: `claude` (Claude Desktop), `cursor`, `vscode`.
+Supported clients: `claude` (Claude Desktop), `claude-code`, `cursor`, `vscode`, `indusagi`.
 
 ## How it works
 
-- Searches and reads server records from the IndusMCP registry (`https://indusmcp.vercel.app/api/v0`) over plain HTTP.
+- Searches and reads server records from the IndusMCP registry (`https://www.indusmcp.com/api/v0`) over plain HTTP.
 - For an `npm` server: writes `{ command: "npx", args: ["-y", <package>, ...args] }` into the client's config.
 - For a `pypi` server: writes `{ command: "uvx", args: [<package>, ...args] }`.
 - Prompts for any required `environmentVariables` and `packageArguments` declared in the server record.

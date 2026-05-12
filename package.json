@@ -1,6 +1,6 @@
 {
   "name": "indusmcp",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "IndusMCP CLI — search and install MCP servers locally. Credentials stay on your machine.",
   "license": "MIT",
   "type": "module",
@@ -25,13 +25,13 @@
     "registry",
     "india-stack"
   ],
-  "homepage": "https://indusmcp.dev",
+  "homepage": "https://www.indusmcp.com",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/indusmcp/cli.git"
+    "url": "git+https://github.com/varunisrani/indusmcp-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/indusmcp/cli/issues"
+    "url": "https://github.com/varunisrani/indusmcp-cli/issues"
   },
   "scripts": {
     "build": "tsup src/index.ts --format esm --target node20 --shims --no-splitting --clean",

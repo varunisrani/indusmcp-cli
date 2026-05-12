@@ -1,5 +1,5 @@
 const REGISTRY =
-  process.env.INDUSMCP_REGISTRY ?? "https://indusmcp.vercel.app/api/v0";
+  process.env.INDUSMCP_REGISTRY ?? "https://www.indusmcp.com/api/v0";
 
 export type EnvVar = {
   name: string;

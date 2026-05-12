@@ -13,7 +13,7 @@ program
   .description(
     "Search and install MCP servers locally. Credentials stay on your machine.",
   )
-  .version("0.1.6");
+  .version("0.1.7");
 
 program
   .command("search <query>")
@@ -46,7 +46,7 @@ program.parseAsync().catch((err) => {
   console.error(kleur.red("ERR"), msg + (cause ? ` (cause: ${cause})` : ""));
   if (msg.toLowerCase().includes("fetch failed")) {
     const reg =
-      process.env.INDUSMCP_REGISTRY ?? "https://indusmcp.vercel.app/api/v0";
+      process.env.INDUSMCP_REGISTRY ?? "https://www.indusmcp.com/api/v0";
     console.error(kleur.dim(`     registry: ${reg}`));
     console.error(
       kleur.dim(
